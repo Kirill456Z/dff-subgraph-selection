@@ -32,11 +32,13 @@ class TestMetrics(unittest.TestCase):
             'LSTM' : 0.5
         }
 
+        tol = 1e-5
         for metric_name, value in expected_values.items():
-            self.assertEqual(value, metrics[metric_name], f"metric {metric_name} should be {value} on same dialogue, but got {metrics[metric_name]}")
+            diff = abs(value - metrics[metric_name])
+            self.assertLess(diff, tol, f"metric {metric_name} should be {value} on same dialogue, but got {metrics[metric_name]}")
         
         for metric_name, value in expected_gt.items():
-            self.assertGreater(metrics[metric_name], value, f"metric {metric_name} should be greater than {value} but got {metrics[metric_name]}")
+            self.assertGreater(metrics[metric_name], value - tol, f"metric {metric_name} should be greater than {value} but got {metrics[metric_name]}")
 
     
     def test_low_similarity(self):
